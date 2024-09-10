@@ -1,4 +1,4 @@
-name: "Coding Standards"
+name: "Check validity of composer.json"
 
 on:
   pull_request:
@@ -12,13 +12,10 @@ on:
       - "master"
       - "feature/*"
 
-env:
-  PHP_VERSION: "8.1"
-
 jobs:
-  coding-standards:
-    name: "Coding Standards"
-    runs-on: "ubuntu-20.04"
+  composer-validate:
+    name: "Check validity of composer.json"
+    runs-on: "ubuntu-24.04"
 
     steps:
       - name: "Checkout"
@@ -28,11 +25,6 @@ jobs:
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
-        with:
-          php-version: "${{ env.PHP_VERSION }}"
 
-      - name: "Configure driver"
-        run: .github/workflows/configure.sh
-
-      - name: "Run clang-format"
-        run: "make format-check"
+      - name: "Run composer validate"
+        run: "composer validate --strict"
